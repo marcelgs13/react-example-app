@@ -1,0 +1,70 @@
+name: DevSecOps Security Scan
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test -- --watchAll=false
+
+  security-scan:
+    name: 🛡️ DevSecOps (SAST Semgrep & Container Trivy)
+    needs: [lint-and-test]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+
+    steps:
+      - name: 📥 Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: 🔍 SAST com Semgrep (Regras OWASP Top 10)
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/src" \
+            returntocorp/semgrep \
+            semgrep scan \
+            --config p/owasp-top-ten \
+            --config p/security-audit \
+            --error \
+            /src/src
+
+      - name: 🐳 Compilar Imagem Docker Efêmera para Análise
+        run: |
+          docker build -t app-audit:local .
+
+      - name: 🛡️ Escanear Imagem Docker com Aqua Security Trivy
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: 'app-audit:local'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os'
+          severity: 'CRITICAL,HIGH'
