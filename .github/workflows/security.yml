@@ -53,7 +53,7 @@ jobs:
             --config p/owasp-top-ten \
             --config p/security-audit \
             --error \
-            /src
+            /src/src
 
       - name: 🐳 Compilar Imagem Docker Efêmera para Análise
         run: |
