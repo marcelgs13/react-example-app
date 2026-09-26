@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1](https://github.com/marcelgs13/react-example-app/compare/v1.0.0...v1.0.1) (2026-09-26)
+
+
+### Bug Fixes
+
+* **docker:** avoid qemu node execution in multiarch build ([622cdd0](https://github.com/marcelgs13/react-example-app/commit/622cdd075dd15081fd287b6ad5ee24e27411156b))
+* **docker:** avoid qemu node execution in multiarch build ([2ddc029](https://github.com/marcelgs13/react-example-app/commit/2ddc0291ece38bcbf20e00e74d6f11f732c56a4f))
+* **security:** upgrade alpine packages in production image ([9945342](https://github.com/marcelgs13/react-example-app/commit/99453426d2624fa4eb61baa6591a26e33707a9a8))
+
 ## 1.0.0 (2026-09-26)
 
 
