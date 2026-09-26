@@ -1,0 +1,8 @@
+node_modules
+build
+.git
+.gitignore
+.devcontainer
+README.md
+Dockerfile
+Dockerfile.multi
