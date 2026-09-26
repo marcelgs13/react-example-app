@@ -57,7 +57,7 @@ jobs:
           docker build -t app-audit:local .
 
       - name: 🛡️ Escanear Imagem Docker com Aqua Security Trivy
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: 'app-audit:local'
           format: 'table'
