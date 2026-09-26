@@ -1,6 +1,5 @@
-FROM  node:18-alpine
+# Imagem antiga deliberadamente vulnerável para validação do Trivy
+FROM node:14.15.0-buster
 WORKDIR /app
-COPY package.json package-lock.json ./
 COPY . .
-RUN npm install
-CMD ["npm","run","start"]
+CMD ["npm", "start"]
