@@ -45,12 +45,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🔍 SAST com Semgrep (Regras OWASP Top 10)
-        uses: semgrep/semgrep-action@v1
-        with:
-          config: >-
-            p/owasp-top-ten
-            p/security-audit
-          auditOn: push
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/src" \
+            returntocorp/semgrep \
+            semgrep scan \
+            --config p/owasp-top-ten \
+            --config p/security-audit \
+            --error \
+            /src
 
       - name: 🐳 Compilar Imagem Docker Efêmera para Análise
         run: |
